@@ -1,3 +1,4 @@
+import { MAX_PACE_S, MIN_PACE_S, PATTERNS, type PatternId } from './breath';
 import type { Theme } from './theme';
 
 /** Bump when a stored shape changes incompatibly; old data is then ignored. */
@@ -13,7 +14,17 @@ export interface Settings {
   /** null follows the system preference. */
   reduceMotion: boolean | null;
   leftHanded: boolean;
+  breathPattern: PatternId;
+  /** Seconds per base breathing step, MIN_PACE_S to MAX_PACE_S. */
+  breathPace: number;
+  /** Session length in minutes; 0 means no end. */
+  breathMinutes: 0 | 1 | 3 | 5;
+  breathSound: 'gong' | 'chime' | 'off';
+  /** Show the seconds left inside the circle. */
+  breathCount: boolean;
 }
+
+export const BREATH_MINUTES = [0, 1, 3, 5] as const;
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'auto',
@@ -23,6 +34,11 @@ export const DEFAULT_SETTINGS: Settings = {
   muted: false,
   reduceMotion: null,
   leftHanded: false,
+  breathPattern: 'gentle',
+  breathPace: 5,
+  breathMinutes: 0,
+  breathSound: 'gong',
+  breathCount: true,
 };
 
 export interface MoodEntry {
@@ -86,6 +102,16 @@ export function sanitizeSettings(raw: Partial<Settings> | null): Settings {
     muted: r.muted === true,
     reduceMotion: typeof r.reduceMotion === 'boolean' ? r.reduceMotion : null,
     leftHanded: r.leftHanded === true,
+    breathPattern:
+      r.breathPattern && r.breathPattern in PATTERNS ? r.breathPattern : d.breathPattern,
+    breathPace:
+      typeof r.breathPace === 'number' && Number.isFinite(r.breathPace)
+        ? Math.min(MAX_PACE_S, Math.max(MIN_PACE_S, r.breathPace))
+        : d.breathPace,
+    breathMinutes: BREATH_MINUTES.find((m) => m === r.breathMinutes) ?? d.breathMinutes,
+    breathSound:
+      r.breathSound === 'chime' || r.breathSound === 'off' ? r.breathSound : d.breathSound,
+    breathCount: r.breathCount !== false,
   };
 }
 
