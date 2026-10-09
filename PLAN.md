@@ -8,19 +8,19 @@ Research basis: [Calm Games Suite: Research Report](https://claude.ai/code/artif
 
 ## 1. Decisions
 
-| Area | Decision | Why |
-| --- | --- | --- |
-| Platform | Installable web app (PWA) for phone, tablet and desktop | One codebase; testers just open a link; works offline |
-| Language | TypeScript | Safer game-rule code; good editor support |
-| Build tool | Vite | Fast dev server; simple static build |
-| UI | Vanilla TS + Web Components (no heavy framework) | Small bundle; full control of animation |
-| Rendering | SVG for board games, Canvas 2D for sand garden and jigsaw | Crisp tiles; smooth free-form drawing |
-| Audio | Howler.js | Reliable looping, fading and mobile audio unlock |
-| State and saves | `localStorage` with a versioned save schema | No accounts; resume anywhere |
-| Tests | Vitest (rules and logic), Playwright (smoke test) | Fast unit tests, one end-to-end check |
-| Lint and format | ESLint + Prettier | Consistent code |
-| Hosting | GitHub Pages, deployed by GitHub Actions | Free; deploys on every push to `main` |
-| Feedback | In-app feedback sheet that posts to a Google Form (or Tally) | Comparable tester data with no backend |
+| Area            | Decision                                                     | Why                                                   |
+| --------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| Platform        | Installable web app (PWA) for phone, tablet and desktop      | One codebase; testers just open a link; works offline |
+| Language        | TypeScript                                                   | Safer game-rule code; good editor support             |
+| Build tool      | Vite                                                         | Fast dev server; simple static build                  |
+| UI              | Vanilla TS + Web Components (no heavy framework)             | Small bundle; full control of animation               |
+| Rendering       | SVG for board games, Canvas 2D for sand garden and jigsaw    | Crisp tiles; smooth free-form drawing                 |
+| Audio           | Howler.js                                                    | Reliable looping, fading and mobile audio unlock      |
+| State and saves | `localStorage` with a versioned save schema                  | No accounts; resume anywhere                          |
+| Tests           | Vitest (rules and logic), Playwright (smoke test)            | Fast unit tests, one end-to-end check                 |
+| Lint and format | ESLint + Prettier                                            | Consistent code                                       |
+| Hosting         | GitHub Pages, deployed by GitHub Actions                     | Free; deploys on every push to `main`                 |
+| Feedback        | In-app feedback sheet that posts to a Google Form (or Tally) | Comparable tester data with no backend                |
 
 Open: native app wrappers (Capacitor) can come later if the web app tests well.
 
@@ -45,16 +45,16 @@ Open: native app wrappers (Capacitor) can come later if the web app tests well.
 
 ### Colour tokens
 
-| Token | Hex | Use |
-| --- | --- | --- |
-| `--mist` | `#EEF3F1` | Day background |
-| `--dusk-slate` | `#26323A` | Evening background (never pure black) |
-| `--sage` | `#9DB8A8` | Primary: boards, buttons |
-| `--still-water` | `#8FB3C4` | Secondary: highlights, selection |
-| `--sand` | `#E6D5B8` | Warm accent: tiles, wood, paper |
-| `--lavender-haze` | `#B8B0CF` | Soft accent: hints, special tiles |
-| `--soft-gold` | `#E8C98A` | Success glow |
-| `--deep-moss` | `#3E4A44` | Text on light backgrounds |
+| Token             | Hex       | Use                                   |
+| ----------------- | --------- | ------------------------------------- |
+| `--mist`          | `#EEF3F1` | Day background                        |
+| `--dusk-slate`    | `#26323A` | Evening background (never pure black) |
+| `--sage`          | `#9DB8A8` | Primary: boards, buttons              |
+| `--still-water`   | `#8FB3C4` | Secondary: highlights, selection      |
+| `--sand`          | `#E6D5B8` | Warm accent: tiles, wood, paper       |
+| `--lavender-haze` | `#B8B0CF` | Soft accent: hints, special tiles     |
+| `--soft-gold`     | `#E8C98A` | Success glow                          |
+| `--deep-moss`     | `#3E4A44` | Text on light backgrounds             |
 
 Themes: Day, Dusk and Night (auto after 7 pm). Text contrast at least WCAG AA (4.5:1). Tiles carry symbols as well as colour, so they stay colour-blind safe.
 
@@ -66,13 +66,13 @@ Themes: Day, Dusk and Night (auto after 7 pm). Text contrast at least WCAG AA (4
 
 ### Sound
 
-| Layer | Spec |
-| --- | --- |
-| Music | Ambient piano, pads, bansuri or santoor; 55 to 70 BPM; 20 to 60 s of near-silence between tracks |
-| Nature bed | One per game (rain, stream, birds, chimes, ocean, meadow) |
-| Interaction | Wood clicks, stone taps, pentatonic chimes |
-| Errors | None, or a single low muted tap |
-| Controls | Separate music, nature and effects sliders; mute all |
+| Layer       | Spec                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------ |
+| Music       | Ambient piano, pads, bansuri or santoor; 55 to 70 BPM; 20 to 60 s of near-silence between tracks |
+| Nature bed  | One per game (rain, stream, birds, chimes, ocean, meadow)                                        |
+| Interaction | Wood clicks, stone taps, pentatonic chimes                                                       |
+| Errors      | None, or a single low muted tap                                                                  |
+| Controls    | Separate music, nature and effects sliders; mute all                                             |
 
 All audio must be CC0 or royalty-free and is listed in `CREDITS.md`.
 
@@ -80,15 +80,15 @@ All audio must be CC0 or royalty-free and is listed in `CREDITS.md`.
 
 ## 4. Suite contents
 
-| # | Game | Mechanic | Nature sound | Theme |
-| --- | --- | --- | --- | --- |
-| Home | Zen Garden | Rake sand, place stones, breathing guide | Rain | Sand |
-| 1 | Petal Mandala | Colour-by-region | Wind chimes | Lavender haze |
-| 2 | River Stones | Mancala (Kalah rules) vs gentle AI or 2 players | Stream | Still water |
-| 3 | Quiet Grid | Nonograms that reveal nature pictures | Forest birds | Sage |
-| 4 | Lotus Tiles | Mahjong solitaire with auto-shuffle when stuck | Pond and frogs | Sage |
-| 5 | Slow Puzzle | Jigsaw of calm landscapes | Ocean | Still water |
-| 6 | Grow a Valley | Tile-laying garden builder | Meadow | Sand |
+| #    | Game          | Mechanic                                        | Nature sound   | Theme         |
+| ---- | ------------- | ----------------------------------------------- | -------------- | ------------- |
+| Home | Zen Garden    | Rake sand, place stones, breathing guide        | Rain           | Sand          |
+| 1    | Petal Mandala | Colour-by-region                                | Wind chimes    | Lavender haze |
+| 2    | River Stones  | Mancala (Kalah rules) vs gentle AI or 2 players | Stream         | Still water   |
+| 3    | Quiet Grid    | Nonograms that reveal nature pictures           | Forest birds   | Sage          |
+| 4    | Lotus Tiles   | Mahjong solitaire with auto-shuffle when stuck  | Pond and frogs | Sage          |
+| 5    | Slow Puzzle   | Jigsaw of calm landscapes                       | Ocean          | Still water   |
+| 6    | Grow a Valley | Tile-laying garden builder                      | Meadow         | Sand          |
 
 Suite-wide features: breathing guide (about 6 breaths/min), before/after mood check (5 faces, stored on device), wind-down prompt after 20 to 30 minutes, settings (theme, audio, reduced motion, left-handed layout), feedback sheet, and version + "what's new" note.
 
@@ -139,7 +139,7 @@ interface CalmGame {
   mount(root: HTMLElement, ctx: GameContext): void;
   pause(): void;
   resume(): void;
-  save(): unknown;          // serialisable state
+  save(): unknown; // serialisable state
   load(state: unknown): void;
   unmount(): void;
 }
@@ -151,16 +151,16 @@ Game rules (Mancala sowing, Mahjong free-tile checks, nonogram solving) live in 
 
 ## 6. Milestones
 
-| Milestone | Scope | Exit criteria |
-| --- | --- | --- |
-| M0 Setup | Repo, Vite + TS scaffold, lint, tests, CI, Pages deploy, README log | A "Hello calm" page is live on GitHub Pages from `main` |
-| M1 Shell | Design tokens, home Zen Garden, settings, audio mixer, breathing guide, mood check, feedback sheet, PWA install/offline | Shell is live; a tester can install it and send feedback |
-| M2 First games | Petal Mandala, River Stones, Quiet Grid | Three games playable end to end, saved and resumed |
-| T1 Test round 1 | 5 to 10 testers after a work day | Feedback and mood data collected; top issues logged as GitHub issues |
-| M3 More games | Lotus Tiles, Slow Puzzle | Playable, tested |
-| M4 Garden builder | Grow a Valley | Playable, tested |
-| T2 Test round 2 | Same testers plus new ones | Compare mood deltas with round 1 |
-| M5 Polish | Fixes from feedback, accessibility pass, performance | Lighthouse 90+ on performance and accessibility |
+| Milestone         | Scope                                                                                                                   | Exit criteria                                                        |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| M0 Setup          | Repo, Vite + TS scaffold, lint, tests, CI, Pages deploy, README log                                                     | A "Hello calm" page is live on GitHub Pages from `main`              |
+| M1 Shell          | Design tokens, home Zen Garden, settings, audio mixer, breathing guide, mood check, feedback sheet, PWA install/offline | Shell is live; a tester can install it and send feedback             |
+| M2 First games    | Petal Mandala, River Stones, Quiet Grid                                                                                 | Three games playable end to end, saved and resumed                   |
+| T1 Test round 1   | 5 to 10 testers after a work day                                                                                        | Feedback and mood data collected; top issues logged as GitHub issues |
+| M3 More games     | Lotus Tiles, Slow Puzzle                                                                                                | Playable, tested                                                     |
+| M4 Garden builder | Grow a Valley                                                                                                           | Playable, tested                                                     |
+| T2 Test round 2   | Same testers plus new ones                                                                                              | Compare mood deltas with round 1                                     |
+| M5 Polish         | Fixes from feedback, accessibility pass, performance                                                                    | Lighthouse 90+ on performance and accessibility                      |
 
 ---
 

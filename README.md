@@ -3,12 +3,13 @@
 A collection of soothing, untimed, no-lose board and puzzle games, each with calming colours, music and nature sounds. They are made to help players unwind after a stressful day.
 
 - **Plan:** [PLAN.md](PLAN.md)
-- **Research:** [Calm Games Suite: Research Report](https://claude.ai/code/artifact/0f7fd0b2-5f13-4308-90a4-1acb514acea7)
-- **Live test build:** _not deployed yet_ (will be `https://<github-user>.github.io/<repo-name>/`)
+- **Research:** [docs/research-report.md](docs/research-report.md) (snapshot of the [live research doc](https://claude.ai/code/artifact/0f7fd0b2-5f13-4308-90a4-1acb514acea7))
+- **Credits:** [CREDITS.md](CREDITS.md)
+- **Live test build:** _not deployed yet_ (will be `https://rupeshbhurke.github.io/calm-games-suite/`)
 
 ## Status
 
-Milestone **M0 Setup** is in progress. The local repo and plan are ready; the GitHub remote, app scaffold, CI and deployment are next.
+Milestone **M0 Setup** is in progress. The app scaffold, tests, CI and deploy workflows are committed locally; the first push to GitHub and enabling Pages are next.
 
 ## Tech stack
 
@@ -16,16 +17,15 @@ TypeScript, Vite, SVG and Canvas 2D, Howler.js, Vitest, Playwright, ESLint and P
 
 ## Getting started
 
-> These commands become available once the app scaffold is added (step 6 in the log below).
-
 Prerequisites: Git, and Node.js 20 or later with npm.
 
 ```bash
-git clone <remote-url>
+git clone https://github.com/rupeshbhurke/calm-games-suite.git
 cd calm-games-suite
 npm install
 npm run dev        # start the dev server at http://localhost:5173
-npm run lint       # check code style
+npm run lint       # ESLint
+npm run format     # Prettier (format:check in CI)
 npm run typecheck  # TypeScript checks
 npm test           # unit tests
 npm run build      # production build into dist/
@@ -82,14 +82,61 @@ git add .
 git commit -m "Add project plan, README and repo housekeeping"
 ```
 
+### Step 6: Add the remote (2026-10-10)
+
+GitHub repo created by Rupesh (public, empty: no README, .gitignore or licence).
+
+```bash
+git remote add origin https://github.com/rupeshbhurke/calm-games-suite.git
+```
+
+### Step 7: Add the research report to the repo (2026-10-10)
+
+The live research doc was exported as Markdown to `docs/research-report.md`. Re-export it when the doc changes.
+
+### Step 8: Scaffold the Vite + TypeScript app (2026-10-10)
+
+```bash
+# package.json written by hand: name, version 0.1.0, scripts, engines (Node >= 20)
+npm install -D vite typescript vitest eslint @eslint/js typescript-eslint globals prettier @types/node
+```
+
+Versions installed: Vite 8.3, TypeScript 7.0, Vitest 5.0, ESLint 10.12, typescript-eslint 8.71, Prettier 3.9.
+
+Files added:
+
+- `package.json` scripts: `dev`, `build`, `preview`, `typecheck`, `lint`, `format`, `format:check`, `test`, `test:watch`.
+- `tsconfig.json`: strict mode, bundler resolution, no emit (Vite builds).
+- `vite.config.ts`: `base` from the `BASE_PATH` env var (for GitHub Pages), app version injected as `__APP_VERSION__`, Vitest config.
+- `eslint.config.js`, `.prettierrc.json`, `.prettierignore`.
+- `index.html`, `public/favicon.svg`.
+- `src/styles/tokens.css`: colour, motion and theme tokens from PLAN.md; `src/styles/main.css`.
+- `src/core/theme.ts`: Day / Dusk / Night by hour; `src/core/breath.ts`: 6 breaths/min cycle.
+- `src/main.ts`: "Hello calm" page with a breathing circle and version number.
+- `tests/theme.test.ts`, `tests/breath.test.ts`: 6 unit tests.
+- `CREDITS.md`: asset licence register.
+
+Checked locally:
+
+```bash
+npm run typecheck
+npm run lint
+npm run format:check
+npm test                                   # 6 passed
+BASE_PATH=/calm-games-suite/ npm run build # asset paths start with /calm-games-suite/
+```
+
+### Step 9: Add GitHub Actions workflows (2026-10-10)
+
+- `.github/workflows/ci.yml`: on pushes to branches other than `main`, and on pull requests: install, lint, format check, type-check, test, build.
+- `.github/workflows/deploy.yml`: on push to `main` (or run manually): the same checks, then builds with `BASE_PATH=/<repo-name>/` and publishes `dist/` to GitHub Pages using `actions/configure-pages`, `actions/upload-pages-artifact` and `actions/deploy-pages`.
+
 ### Next steps (to do)
 
-- [ ] **Step 6:** Scaffold the Vite + TypeScript app, ESLint, Prettier and Vitest.
-- [ ] **Step 7:** Create the GitHub repo (owner: Rupesh) and add the remote:
+- [ ] **Step 10:** In GitHub, go to **Settings > Pages > Build and deployment** and set **Source** to **GitHub Actions**.
+- [ ] **Step 11:** Push from a terminal that has GitHub credentials:
   ```bash
-  git remote add origin <remote-url>
+  cd C:\RB\Workarea\Repo\RnD\calm-games-suite
   git push -u origin main
   ```
-- [ ] **Step 8:** Add `.github/workflows/ci.yml` and `.github/workflows/deploy.yml`.
-- [ ] **Step 9:** In GitHub, go to **Settings > Pages > Build and deployment** and set **Source** to **GitHub Actions**.
-- [ ] **Step 10:** Push to `main`, confirm the Deploy workflow passes, and record the live URL at the top of this README.
+- [ ] **Step 12:** Open the **Actions** tab, confirm the Deploy workflow is green, and open https://rupeshbhurke.github.io/calm-games-suite/.

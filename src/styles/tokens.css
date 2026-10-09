@@ -1,0 +1,41 @@
+:root {
+  --mist: #eef3f1;
+  --dusk-slate: #26323a;
+  --sage: #9db8a8;
+  --still-water: #8fb3c4;
+  --sand: #e6d5b8;
+  --lavender-haze: #b8b0cf;
+  --soft-gold: #e8c98a;
+  --deep-moss: #3e4a44;
+
+  --bg: var(--mist);
+  --text: var(--deep-moss);
+  --surface: #f7faf8;
+
+  --ease-calm: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-small: 300ms;
+  --dur-move: 450ms;
+  --dur-scene: 600ms;
+
+  --radius: 20px;
+  --font: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+}
+
+:root[data-theme='dusk'],
+:root[data-theme='night'] {
+  --bg: var(--dusk-slate);
+  --text: #dde6e1;
+  --surface: #2f3d46;
+}
+
+:root[data-theme='night'] {
+  --bg: #1f2930;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-small: 0ms;
+    --dur-move: 0ms;
+    --dur-scene: 0ms;
+  }
+}
