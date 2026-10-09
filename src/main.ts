@@ -75,7 +75,9 @@ if (app) {
   const smooth = el('button', { type: 'button', text: 'Smooth' });
   smooth.addEventListener('click', () => garden.smooth());
   const breathe = el('button', { type: 'button', text: 'Breathe' });
-  breathe.addEventListener('click', openBreathingGuide);
+  breathe.addEventListener('click', () =>
+    openBreathingGuide({ settings: () => settings, update, mixer }),
+  );
   const sound = el('button', { type: 'button' });
   const syncSound = () => {
     sound.textContent = settings.muted ? 'Sound off' : 'Sound on';
