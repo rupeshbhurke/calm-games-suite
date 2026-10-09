@@ -180,6 +180,10 @@ Regenerate icons with `node scripts/make-icons.mjs`.
 
 On branch `feature/breathing-guide`: a progress ring and a "next" label show each switch coming, with an optional seconds count. Patterns: Gentle (5/5), Relaxing (4/6) and Box (4/4/4/4, with a note that holds can feel tense). A pace slider (3 to 8 s) slows or speeds the breath, and optional 1, 3 or 5 minute sessions end with a soft gong. A synthesised gong marks each in and out (holds stay silent); it can be switched to a chime or off. Choices are saved in settings. Version bumped to 0.2.1.
 
+### Step 18: Build M2, the first three games (2026-10-10)
+
+On branch `feature/m2-first-games`: a hash router and a shared game interface (`CalmGame`) let the shell load, pause, save and resume any game; each game's state is auto-saved to `localStorage`. **Petal Mandala** (57 regions, 8 colours, tap or drag to colour, unlimited undo), **River Stones** (Kalah rules in pure functions, a deliberately gentle opponent that plays a sensible move about 60% of the time, hints, undo, two-player mode; the end is a quiet tally, not a win or loss) and **Quiet Grid** (nonograms with three nature pictures, drag to fill, mark-empty mode, hints that fill a correct cell). The Games button on the home screen opens the picker. Per-game nature sound beds are not built yet; the games use the shared chimes. Version bumped to 0.3.0.
+
 ### How to deploy a new tester build
 
 1. Commit your changes on a `feature/<name>` branch and push it; the CI workflow checks it.
