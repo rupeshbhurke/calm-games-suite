@@ -10,6 +10,13 @@ export function themeForHour(hour: number): Theme {
   return 'night';
 }
 
+/** Resolve the user's choice ('auto' follows the clock) to a concrete theme. */
+export function resolveTheme(choice: 'auto' | Theme, hour: number): Theme {
+  return choice === 'auto' ? themeForHour(hour) : choice;
+}
+
 export function applyTheme(theme: Theme, root: HTMLElement = document.documentElement): void {
   root.dataset.theme = theme;
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (meta) meta.content = theme === 'day' ? '#EEF3F1' : theme === 'dusk' ? '#26323A' : '#1F2930';
 }

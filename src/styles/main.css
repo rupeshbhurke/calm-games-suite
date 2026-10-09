@@ -16,29 +16,195 @@ body {
     color var(--dur-scene) var(--ease-calm);
 }
 
-main {
+#app {
   min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+
+header {
   text-align: center;
 }
 
 h1 {
   font-weight: 400;
+  font-size: 1.3rem;
   letter-spacing: 0.02em;
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 p {
   margin: 0;
-  opacity: 0.8;
 }
 
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 240px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+}
+
+.garden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.stage-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  text-align: center;
+  color: var(--deep-moss);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+[data-handed='left'] .toolbar {
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
+button,
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--text) 25%, transparent);
+  border-radius: 999px;
+  padding: 10px 16px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: background var(--dur-small) var(--ease-calm);
+}
+
+button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--sage) 35%, var(--surface));
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button[aria-pressed='true'],
+button.primary {
+  background: var(--sage);
+  color: var(--deep-moss);
+  border-color: transparent;
+}
+
+button.quiet {
+  background: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--still-water);
+  outline-offset: 2px;
+}
+
+/* Sheets */
+.sheet {
+  width: min(92vw, 420px);
+  max-height: 90dvh;
+  overflow: auto;
+  padding: 24px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 8px 40px rgb(0 0 0 / 25%);
+}
+
+.sheet::backdrop {
+  background: rgb(38 50 58 / 45%);
+}
+
+.sheet h2 {
+  margin: 0 0 16px;
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+
+.sheet > * + * {
+  margin-top: 14px;
+}
+
+.hint {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row.end {
+  justify-content: flex-end;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field input[type='range'] {
+  flex: 1;
+  max-width: 220px;
+  accent-color: var(--sage);
+}
+
+.field.toggle {
+  justify-content: flex-start;
+}
+
+.field.toggle input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--sage);
+}
+
+.faces {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.face {
+  font-size: 1.8rem;
+  padding: 8px 10px;
+  border-radius: 50%;
+}
+
+.summary-faces {
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+/* Breathing guide */
 .breath {
   width: 160px;
   height: 160px;
-  margin: 40px auto;
+  margin: 24px auto;
   border-radius: 50%;
   background: radial-gradient(circle, var(--still-water), var(--sage));
   opacity: 0.85;
@@ -49,12 +215,7 @@ p {
 .breath-label {
   min-height: 1.5em;
   font-size: 1.1rem;
-}
-
-.version {
-  margin-top: 32px;
-  font-size: 0.8rem;
-  opacity: 0.6;
+  text-align: center;
 }
 
 /* 5 s in, 5 s out = 6 breaths per minute */
@@ -73,4 +234,9 @@ p {
     animation: none;
     transform: scale(0.8);
   }
+}
+
+[data-motion='reduced'] .breath {
+  animation: none;
+  transform: scale(0.8);
 }
