@@ -5,11 +5,11 @@ A collection of soothing, untimed, no-lose board and puzzle games, each with cal
 - **Plan:** [PLAN.md](PLAN.md)
 - **Research:** [docs/research-report.md](docs/research-report.md) (snapshot of the [live research doc](https://claude.ai/code/artifact/0f7fd0b2-5f13-4308-90a4-1acb514acea7))
 - **Credits:** [CREDITS.md](CREDITS.md)
-- **Live test build:** _not deployed yet_ (will be `https://rupeshbhurke.github.io/calm-games-suite/`)
+- **Live test build:** https://rupeshbhurke.github.io/calm-games-suite/
 
 ## Status
 
-Milestone **M0 Setup** is in progress. The app scaffold, tests, CI and deploy workflows are committed locally; the first push to GitHub and enabling Pages are next.
+Milestone **M0 Setup** is done: the "Hello calm" page deploys automatically to GitHub Pages on every push to `main`. Next is **M1 Shell** (home Zen Garden, settings, audio, breathing guide, mood check, feedback sheet, offline install).
 
 ## Tech stack
 
@@ -146,11 +146,29 @@ The Deploy workflow ran: install, lint, format check, tests and build all passed
 
 Bumped every action to its latest major version: `actions/checkout@v7`, `actions/setup-node@v7`, `actions/configure-pages@v6`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`.
 
-### Next steps (to do)
+### Step 12: Enable GitHub Pages (2026-10-10)
 
-- [ ] **Step 12:** Enable GitHub Pages with GitHub Actions as the source, either in **Settings > Pages > Build and deployment > Source: GitHub Actions** or with:
-  ```bash
-  gh api -X POST repos/rupeshbhurke/calm-games-suite/pages -f build_type=workflow
-  ```
-- [ ] **Step 13:** Push the workflow update (`git push`); this re-runs Deploy.
-- [ ] **Step 14:** Confirm the Deploy workflow is green and open https://rupeshbhurke.github.io/calm-games-suite/.
+Pages was already enabled with GitHub Actions as the source (set in **Settings > Pages**), so the API call returned `409 GitHub Pages is already enabled`. Either method works:
+
+```bash
+gh api -X POST repos/rupeshbhurke/calm-games-suite/pages -f build_type=workflow
+```
+
+### Step 13: Push the workflow update (2026-10-10)
+
+```bash
+git push
+```
+
+The Deploy workflow passed for commit `59d3482` and the `github-pages` deployment reported success.
+
+### Step 14: Verify the live site (2026-10-10)
+
+Opened https://rupeshbhurke.github.io/calm-games-suite/ in a browser: the page loads with its styles and script, the breathing circle animates, and the theme follows the local time (Night after 22:00).
+
+### How to deploy a new tester build
+
+1. Commit your changes on a `feature/<name>` branch and push it; the CI workflow checks it.
+2. Open a pull request into `main` and merge it once CI is green.
+3. The Deploy workflow publishes `main` to GitHub Pages in about a minute.
+4. Bump `version` in `package.json` for each build you send to testers, and tag it: `git tag v0.1.0 && git push --tags`.
