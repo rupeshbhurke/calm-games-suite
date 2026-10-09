@@ -131,12 +131,26 @@ BASE_PATH=/calm-games-suite/ npm run build # asset paths start with /calm-games-
 - `.github/workflows/ci.yml`: on pushes to branches other than `main`, and on pull requests: install, lint, format check, type-check, test, build.
 - `.github/workflows/deploy.yml`: on push to `main` (or run manually): the same checks, then builds with `BASE_PATH=/<repo-name>/` and publishes `dist/` to GitHub Pages using `actions/configure-pages`, `actions/upload-pages-artifact` and `actions/deploy-pages`.
 
+### Step 10: First push (2026-10-10)
+
+Pushed from Rupesh's Windows terminal, which is signed in with the GitHub CLI:
+
+```bash
+gh auth setup-git
+git push -u origin main
+```
+
+The Deploy workflow ran: install, lint, format check, tests and build all passed, but `actions/configure-pages` failed with "Get Pages site failed ... Not Found" because GitHub Pages was not yet enabled on the repo. GitHub also warned that the v4/v5 actions run on the deprecated Node.js 20.
+
+### Step 11: Update workflow actions (2026-10-10)
+
+Bumped every action to its latest major version: `actions/checkout@v7`, `actions/setup-node@v7`, `actions/configure-pages@v6`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`.
+
 ### Next steps (to do)
 
-- [ ] **Step 10:** In GitHub, go to **Settings > Pages > Build and deployment** and set **Source** to **GitHub Actions**.
-- [ ] **Step 11:** Push from a terminal that has GitHub credentials:
+- [ ] **Step 12:** Enable GitHub Pages with GitHub Actions as the source, either in **Settings > Pages > Build and deployment > Source: GitHub Actions** or with:
   ```bash
-  cd C:\RB\Workarea\Repo\RnD\calm-games-suite
-  git push -u origin main
+  gh api -X POST repos/rupeshbhurke/calm-games-suite/pages -f build_type=workflow
   ```
-- [ ] **Step 12:** Open the **Actions** tab, confirm the Deploy workflow is green, and open https://rupeshbhurke.github.io/calm-games-suite/.
+- [ ] **Step 13:** Push the workflow update (`git push`); this re-runs Deploy.
+- [ ] **Step 14:** Confirm the Deploy workflow is green and open https://rupeshbhurke.github.io/calm-games-suite/.
