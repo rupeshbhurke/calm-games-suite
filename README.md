@@ -9,7 +9,7 @@ A collection of soothing, untimed, no-lose board and puzzle games, each with cal
 
 ## Status
 
-Milestone **M0 Setup** is done: the "Hello calm" page deploys automatically to GitHub Pages on every push to `main`. Next is **M1 Shell** (home Zen Garden, settings, audio, breathing guide, mood check, feedback sheet, offline install).
+Milestone **M0 Setup** is done: the "Hello calm" page deploys automatically to GitHub Pages on every push to `main`. Next is **M1 Shell** (home Zen Garden, settings, audio, breathing guide, mood check, offline install).
 
 ## Tech stack
 
@@ -165,6 +165,10 @@ The Deploy workflow passed for commit `59d3482` and the `github-pages` deploymen
 ### Step 14: Verify the live site (2026-10-10)
 
 Opened https://rupeshbhurke.github.io/calm-games-suite/ in a browser: the page loads with its styles and script, the breathing circle animates, and the theme follows the local time (Night after 22:00).
+
+### Step 15: Drop the online feedback form (2026-10-10)
+
+Decided not to use an online form (Google Forms or Tally) for now. The app stays fully offline with no data leaving the device; tester feedback is gathered by message or in conversation. PLAN.md sections 1, 4, 5, 6 and 8 updated.
 
 ### How to deploy a new tester build
 

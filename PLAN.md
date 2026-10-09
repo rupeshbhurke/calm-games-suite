@@ -8,19 +8,18 @@ Research basis: [Calm Games Suite: Research Report](https://claude.ai/code/artif
 
 ## 1. Decisions
 
-| Area            | Decision                                                     | Why                                                   |
-| --------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
-| Platform        | Installable web app (PWA) for phone, tablet and desktop      | One codebase; testers just open a link; works offline |
-| Language        | TypeScript                                                   | Safer game-rule code; good editor support             |
-| Build tool      | Vite                                                         | Fast dev server; simple static build                  |
-| UI              | Vanilla TS + Web Components (no heavy framework)             | Small bundle; full control of animation               |
-| Rendering       | SVG for board games, Canvas 2D for sand garden and jigsaw    | Crisp tiles; smooth free-form drawing                 |
-| Audio           | Howler.js                                                    | Reliable looping, fading and mobile audio unlock      |
-| State and saves | `localStorage` with a versioned save schema                  | No accounts; resume anywhere                          |
-| Tests           | Vitest (rules and logic), Playwright (smoke test)            | Fast unit tests, one end-to-end check                 |
-| Lint and format | ESLint + Prettier                                            | Consistent code                                       |
-| Hosting         | GitHub Pages, deployed by GitHub Actions                     | Free; deploys on every push to `main`                 |
-| Feedback        | In-app feedback sheet that posts to a Google Form (or Tally) | Comparable tester data with no backend                |
+| Area            | Decision                                                  | Why                                                   |
+| --------------- | --------------------------------------------------------- | ----------------------------------------------------- |
+| Platform        | Installable web app (PWA) for phone, tablet and desktop   | One codebase; testers just open a link; works offline |
+| Language        | TypeScript                                                | Safer game-rule code; good editor support             |
+| Build tool      | Vite                                                      | Fast dev server; simple static build                  |
+| UI              | Vanilla TS + Web Components (no heavy framework)          | Small bundle; full control of animation               |
+| Rendering       | SVG for board games, Canvas 2D for sand garden and jigsaw | Crisp tiles; smooth free-form drawing                 |
+| Audio           | Howler.js                                                 | Reliable looping, fading and mobile audio unlock      |
+| State and saves | `localStorage` with a versioned save schema               | No accounts; resume anywhere                          |
+| Tests           | Vitest (rules and logic), Playwright (smoke test)         | Fast unit tests, one end-to-end check                 |
+| Lint and format | ESLint + Prettier                                         | Consistent code                                       |
+| Hosting         | GitHub Pages, deployed by GitHub Actions                  | Free; deploys on every push to `main`                 |
 
 Open: native app wrappers (Capacitor) can come later if the web app tests well.
 
@@ -90,7 +89,7 @@ All audio must be CC0 or royalty-free and is listed in `CREDITS.md`.
 | 5    | Slow Puzzle   | Jigsaw of calm landscapes                       | Ocean          | Still water   |
 | 6    | Grow a Valley | Tile-laying garden builder                      | Meadow         | Sand          |
 
-Suite-wide features: breathing guide (about 6 breaths/min), before/after mood check (5 faces, stored on device), wind-down prompt after 20 to 30 minutes, settings (theme, audio, reduced motion, left-handed layout), feedback sheet, and version + "what's new" note.
+Suite-wide features: breathing guide (about 6 breaths/min), before/after mood check (5 faces, stored on device), wind-down prompt after 20 to 30 minutes, settings (theme, audio, reduced motion, left-handed layout), and version + "what's new" note. Feedback is collected outside the app for now (see section 8).
 
 ---
 
@@ -112,8 +111,7 @@ calm-games-suite/
 │  │  ├─ audio.ts       # music, nature and effects mixer (Howler)
 │  │  ├─ storage.ts     # versioned saves, settings, mood log
 │  │  ├─ theme.ts       # Day / Dusk / Night tokens
-│  │  ├─ motion.ts      # easing helpers, reduced-motion support
-│  │  └─ feedback.ts    # feedback sheet and form submission
+│  │  └─ motion.ts      # easing helpers, reduced-motion support
 │  ├─ ui/               # shared components: buttons, sheets, sliders, breathing circle
 │  ├─ games/
 │  │  ├─ zen-garden/
@@ -151,16 +149,16 @@ Game rules (Mancala sowing, Mahjong free-tile checks, nonogram solving) live in 
 
 ## 6. Milestones
 
-| Milestone         | Scope                                                                                                                   | Exit criteria                                                        |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| M0 Setup          | Repo, Vite + TS scaffold, lint, tests, CI, Pages deploy, README log                                                     | A "Hello calm" page is live on GitHub Pages from `main`              |
-| M1 Shell          | Design tokens, home Zen Garden, settings, audio mixer, breathing guide, mood check, feedback sheet, PWA install/offline | Shell is live; a tester can install it and send feedback             |
-| M2 First games    | Petal Mandala, River Stones, Quiet Grid                                                                                 | Three games playable end to end, saved and resumed                   |
-| T1 Test round 1   | 5 to 10 testers after a work day                                                                                        | Feedback and mood data collected; top issues logged as GitHub issues |
-| M3 More games     | Lotus Tiles, Slow Puzzle                                                                                                | Playable, tested                                                     |
-| M4 Garden builder | Grow a Valley                                                                                                           | Playable, tested                                                     |
-| T2 Test round 2   | Same testers plus new ones                                                                                              | Compare mood deltas with round 1                                     |
-| M5 Polish         | Fixes from feedback, accessibility pass, performance                                                                    | Lighthouse 90+ on performance and accessibility                      |
+| Milestone         | Scope                                                                                                   | Exit criteria                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| M0 Setup          | Repo, Vite + TS scaffold, lint, tests, CI, Pages deploy, README log                                     | A "Hello calm" page is live on GitHub Pages from `main`              |
+| M1 Shell          | Design tokens, home Zen Garden, settings, audio mixer, breathing guide, mood check, PWA install/offline | Shell is live; a tester can install it and play offline              |
+| M2 First games    | Petal Mandala, River Stones, Quiet Grid                                                                 | Three games playable end to end, saved and resumed                   |
+| T1 Test round 1   | 5 to 10 testers after a work day                                                                        | Feedback and mood data collected; top issues logged as GitHub issues |
+| M3 More games     | Lotus Tiles, Slow Puzzle                                                                                | Playable, tested                                                     |
+| M4 Garden builder | Grow a Valley                                                                                           | Playable, tested                                                     |
+| T2 Test round 2   | Same testers plus new ones                                                                              | Compare mood deltas with round 1                                     |
+| M5 Polish         | Fixes from feedback, accessibility pass, performance                                                    | Lighthouse 90+ on performance and accessibility                      |
 
 ---
 
@@ -175,22 +173,24 @@ Game rules (Mancala sowing, Mahjong free-tile checks, nonogram solving) live in 
 
 ## 8. Feedback loop
 
-1. Tester opens the link (or installed app) and does the mood check.
-2. Plays one or more games.
-3. Does the closing mood check; the feedback sheet asks:
+Online feedback forms are out of scope for now (decided 2026-10-10). The app stays fully offline, with no data leaving the device.
+
+1. We share the live link with testers directly (WhatsApp, email or in person).
+2. Testers do the on-device mood check before and after playing; the before/after scores are stored only on their device and shown to them.
+3. We ask testers the same few questions in conversation or by message:
    - Which game did you play, and for how long?
    - How calm did you feel before and after (1 to 5)?
    - Did anything feel stressful, confusing or too fast?
    - Music and sound: too loud, too quiet, just right?
    - Anything you would add or remove?
-4. The sheet submits to a Google Form with the app version and game ID attached; no personal data beyond what the tester types.
-5. We review responses after each round and turn them into GitHub issues.
+4. We note the answers and the app version (shown in Settings), then turn issues into GitHub issues.
+
+An in-app form can be added later without changing the games.
 
 ---
 
 ## 9. Open questions
 
-- [ ] GitHub repo name and visibility (public is needed for free GitHub Pages on a personal account).
-- [ ] Google Form or Tally for feedback?
+- [x] GitHub repo: `rupeshbhurke/calm-games-suite`, public.
 - [ ] Final game titles and suite name.
 - [ ] Music source: commission, CC0 library, or generated in-app with Web Audio.
