@@ -87,7 +87,7 @@ export function openBreathingGuide(ctx: BreathingContext): void {
   const sound = (kind: string, seconds: number) => {
     if (kind !== 'in' && kind !== 'out') return; // holds stay silent
     const mode = s().breathSound;
-    if (mode === 'gong') ctx.mixer.gong(kind === 'in' ? 110 : 82.5, Math.min(4, seconds));
+    if (mode === 'gong') ctx.mixer.gong(kind === 'in' ? 196 : 147, Math.min(4, seconds));
     else if (mode === 'chime') ctx.mixer.chime(kind === 'in' ? 5 : 2);
   };
 
@@ -104,7 +104,7 @@ export function openBreathingGuide(ctx: BreathingContext): void {
       count.textContent = '';
       ringProgress.style.strokeDashoffset = '0';
       circle.style.transform = 'scale(0.8)';
-      if (cfg.breathSound !== 'off') ctx.mixer.gong(110, 6);
+      if (cfg.breathSound !== 'off') ctx.mixer.gong(196, 6);
       return;
     }
 
