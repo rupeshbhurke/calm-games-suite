@@ -75,10 +75,10 @@ export class Mixer {
   }
 
   /** A soft gong. Plays through the effects bus, so its slider and mute apply. */
-  gong(baseHz = 110, decayS = 4): void {
+  gong(baseHz = 196, decayS = 4): void {
     if (!this.ctx) return;
     for (const p of gongPartials(baseHz, decayS)) {
-      this.tone(p.hz, this.buses.effects, 0.12 * p.gain, 0.01, p.decayS);
+      this.tone(p.hz, this.buses.effects, 0.3 * p.gain, 0.01, p.decayS);
     }
   }
 
