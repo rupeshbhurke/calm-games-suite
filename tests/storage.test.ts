@@ -64,3 +64,42 @@ describe('mood log', () => {
     expect(loadMoodLog(store)).toEqual([]);
   });
 });
+
+describe('breathing settings', () => {
+  it('clamps pace and rejects unknown patterns, sounds and durations', () => {
+    const store = fakeStore();
+    store.setItem(
+      'calm.settings',
+      JSON.stringify({
+        v: 1,
+        data: { breathPace: 99, breathPattern: 'wild', breathSound: 'horn', breathMinutes: 7 },
+      }),
+    );
+    expect(loadSettings(store)).toMatchObject({
+      breathPace: 8,
+      breathPattern: 'gentle',
+      breathSound: 'gong',
+      breathMinutes: 0,
+    });
+  });
+
+  it('round-trips valid choices', () => {
+    const store = fakeStore();
+    saveSettings(
+      {
+        ...DEFAULT_SETTINGS,
+        breathPattern: 'box',
+        breathPace: 4,
+        breathMinutes: 3,
+        breathCount: false,
+      },
+      store,
+    );
+    expect(loadSettings(store)).toMatchObject({
+      breathPattern: 'box',
+      breathPace: 4,
+      breathMinutes: 3,
+      breathCount: false,
+    });
+  });
+});

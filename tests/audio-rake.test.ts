@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { nextMusicGapS, PENTATONIC_HZ, volumeToGain } from '../src/core/audio';
+import { gongPartials, nextMusicGapS, PENTATONIC_HZ, volumeToGain } from '../src/core/audio';
 import { rakeLines, thin } from '../src/games/zen-garden/rake';
 
 describe('audio helpers', () => {
@@ -46,5 +46,17 @@ describe('rake', () => {
 
   it('draws nothing for a single point', () => {
     expect(rakeLines([{ x: 0, y: 0 }], 5, 4)).toEqual([]);
+  });
+});
+
+describe('gong', () => {
+  it('has inharmonic partials that get quieter and fade sooner', () => {
+    const parts = gongPartials(110, 4);
+    expect(parts[0]).toEqual({ hz: 110, gain: 1, decayS: 4 });
+    for (let i = 1; i < parts.length; i++) {
+      expect(parts[i].hz / 110).not.toBeCloseTo(Math.round(parts[i].hz / 110), 1);
+      expect(parts[i].gain).toBeLessThan(parts[i - 1].gain);
+      expect(parts[i].decayS).toBeLessThan(parts[i - 1].decayS);
+    }
   });
 });

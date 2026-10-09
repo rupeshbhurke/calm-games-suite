@@ -176,6 +176,10 @@ On branch `feature/m1-shell`: Zen Garden home (rake sand, place stones, undo, sm
 
 Regenerate icons with `node scripts/make-icons.mjs`.
 
+### Step 17: Improve the breathing guide (2026-10-10)
+
+On branch `feature/breathing-guide`: a progress ring and a "next" label show each switch coming, with an optional seconds count. Patterns: Gentle (5/5), Relaxing (4/6) and Box (4/4/4/4, with a note that holds can feel tense). A pace slider (3 to 8 s) slows or speeds the breath, and optional 1, 3 or 5 minute sessions end with a soft gong. A synthesised gong marks each in and out (holds stay silent); it can be switched to a chime or off. Choices are saved in settings. Version bumped to 0.2.1.
+
 ### How to deploy a new tester build
 
 1. Commit your changes on a `feature/<name>` branch and push it; the CI workflow checks it.

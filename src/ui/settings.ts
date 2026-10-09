@@ -10,7 +10,8 @@ export interface SettingsContext {
   install?: () => void;
 }
 
-const WHATS_NEW = 'Zen Garden home: rake the sand, place stones, breathe. Works offline.';
+const WHATS_NEW =
+  'Breathing guide: see each change coming, gentle, relaxing or box patterns, a soft gong, optional timed sessions.';
 
 function slider(label: string, value: number, onInput: (v: number) => void): HTMLElement {
   const input = el('input', {

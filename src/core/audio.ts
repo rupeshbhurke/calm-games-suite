@@ -20,6 +20,21 @@ export function nextMusicGapS(rand: () => number = Math.random): number {
   return rand() < 0.25 ? 20 + rand() * 40 : 6 + rand() * 6;
 }
 
+export interface GongPartial {
+  hz: number;
+  gain: number;
+  /** Seconds to fade to silence. */
+  decayS: number;
+}
+
+/** Inharmonic partials that make a struck-bronze tone: a round low note with a soft shimmer above. */
+export function gongPartials(baseHz: number, decayS: number): GongPartial[] {
+  const ratios = [1, 2.76, 5.4, 8.93];
+  const gains = [1, 0.5, 0.25, 0.12];
+  const decays = [1, 0.7, 0.45, 0.3];
+  return ratios.map((r, i) => ({ hz: baseHz * r, gain: gains[i], decayS: decayS * decays[i] }));
+}
+
 export interface Volumes {
   music: number;
   nature: number;
@@ -57,6 +72,14 @@ export class Mixer {
     if (!this.ctx) return;
     const i = ((degree % PENTATONIC_HZ.length) + PENTATONIC_HZ.length) % PENTATONIC_HZ.length;
     this.tone(PENTATONIC_HZ[i] * 2, this.buses.effects, 0.25, 0.01, 1.8);
+  }
+
+  /** A soft gong. Plays through the effects bus, so its slider and mute apply. */
+  gong(baseHz = 110, decayS = 4): void {
+    if (!this.ctx) return;
+    for (const p of gongPartials(baseHz, decayS)) {
+      this.tone(p.hz, this.buses.effects, 0.12 * p.gain, 0.01, p.decayS);
+    }
   }
 
   /** A low, muted stone tap. */
