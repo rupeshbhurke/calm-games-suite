@@ -170,6 +170,12 @@ Opened https://rupeshbhurke.github.io/calm-games-suite/ in a browser: the page l
 
 Decided not to use an online form (Google Forms or Tally) for now. The app stays fully offline with no data leaving the device; tester feedback is gathered by message or in conversation. PLAN.md sections 1, 4, 5, 6 and 8 updated.
 
+### Step 16: Build the M1 shell (2026-10-10)
+
+On branch `feature/m1-shell`: Zen Garden home (rake sand, place stones, undo, smooth; saved on device), settings (theme, three volume sliders, mute, reduce motion, left-handed layout, version and what's new), guided breathing, before/after mood check, and PWA install with offline support (`public/sw.js`, manifest, generated icons). Audio is synthesised with Web Audio (rain bed, slow pentatonic pads, soft taps), so no audio files or Howler yet. Version bumped to 0.2.0.
+
+Regenerate icons with `node scripts/make-icons.mjs`.
+
 ### How to deploy a new tester build
 
 1. Commit your changes on a `feature/<name>` branch and push it; the CI workflow checks it.
