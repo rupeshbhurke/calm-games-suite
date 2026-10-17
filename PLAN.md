@@ -30,7 +30,7 @@ Open: native app wrappers (Capacitor) can come later if the web app tests well.
 1. No timers or countdowns.
 2. No losing; dead ends offer shuffle, undo or a hint.
 3. No scores to beat by default; show quiet progress instead.
-4. Unlimited undo and hints, no penalty.
+4. Unlimited undo and help, no penalty. Help has three steps (a nudge in words, a pointer on the board, then the move itself) and every game has a How to play sheet.
 5. A round fits in 5 to 15 minutes; auto-save and resume.
 6. Repetitive, tactile actions (match, sow, place, colour).
 7. Gentle feedback: soft glow and a low chime; no red flashes, shakes or buzzers.
@@ -79,15 +79,15 @@ All audio must be CC0 or royalty-free and is listed in `CREDITS.md`.
 
 ## 4. Suite contents
 
-| #    | Game          | Mechanic                                        | Nature sound   | Theme         |
-| ---- | ------------- | ----------------------------------------------- | -------------- | ------------- |
-| Home | Zen Garden    | Rake sand, place stones, breathing guide        | Rain           | Sand          |
-| 1    | Petal Mandala | Colour-by-region                                | Wind chimes    | Lavender haze |
-| 2    | River Stones  | Mancala (Kalah rules) vs gentle AI or 2 players | Stream         | Still water   |
-| 3    | Quiet Grid    | Nonograms that reveal nature pictures           | Forest birds   | Sage          |
-| 4    | Lotus Tiles   | Mahjong solitaire with auto-shuffle when stuck  | Pond and frogs | Sage          |
-| 5    | Slow Puzzle   | Jigsaw of calm landscapes                       | Ocean          | Still water   |
-| 6    | Grow a Valley | Tile-laying garden builder                      | Meadow         | Sand          |
+| #    | Game          | Mechanic                                                                                              | Nature sound   | Theme         |
+| ---- | ------------- | ----------------------------------------------------------------------------------------------------- | -------------- | ------------- |
+| Home | Zen Garden    | Rake sand, place stones, rings, moss, lanterns, erase; customise the rake and stones; breathing guide | Rain           | Sand          |
+| 1    | Petal Mandala | Colour-by-region                                                                                      | Wind chimes    | Lavender haze |
+| 2    | River Stones  | Mancala (Kalah rules) vs gentle AI or 2 players                                                       | Stream         | Still water   |
+| 3    | Quiet Grid    | Nonograms that reveal nature pictures                                                                 | Forest birds   | Sage          |
+| 4    | Lotus Tiles   | Mahjong solitaire with auto-shuffle when stuck                                                        | Pond and frogs | Sage          |
+| 5    | Slow Puzzle   | Jigsaw of calm landscapes                                                                             | Ocean          | Still water   |
+| 6    | Grow a Valley | Tile-laying garden builder                                                                            | Meadow         | Sand          |
 
 Suite-wide features: breathing guide (about 6 breaths/min), before/after mood check (5 faces, stored on device), wind-down prompt after 20 to 30 minutes, settings (theme, audio, reduced motion, left-handed layout), and version + "what's new" note. Feedback is collected outside the app for now (see section 8).
 
@@ -155,7 +155,7 @@ Game rules (Mancala sowing, Mahjong free-tile checks, nonogram solving) live in 
 | M1 Shell          | Design tokens, home Zen Garden, settings, audio mixer, breathing guide, mood check, PWA install/offline | Shell is live; a tester can install it and play offline              |
 | M2 First games    | Petal Mandala, River Stones, Quiet Grid                                                                 | Three games playable end to end, saved and resumed                   |
 | T1 Test round 1   | 5 to 10 testers after a work day                                                                        | Feedback and mood data collected; top issues logged as GitHub issues |
-| M3 More games     | Lotus Tiles, Slow Puzzle                                                                                | Playable, tested                                                     |
+| M3 More games     | Lotus Tiles, Slow Puzzle, shared Help in every game, more Zen Garden tools                              | Playable, tested                                                     |
 | M4 Garden builder | Grow a Valley                                                                                           | Playable, tested                                                     |
 | T2 Test round 2   | Same testers plus new ones                                                                              | Compare mood deltas with round 1                                     |
 | M5 Polish         | Fixes from feedback, accessibility pass, performance                                                    | Lighthouse 90+ on performance and accessibility                      |
