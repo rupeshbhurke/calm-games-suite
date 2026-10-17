@@ -1,7 +1,9 @@
 import type { GameInfo } from '../core/game';
+import { createLotusTiles } from './lotus-tiles/lotus-tiles';
 import { createPetalMandala } from './petal-mandala/mandala';
 import { createQuietGrid } from './quiet-grid/quiet-grid';
 import { createRiverStones } from './river-stones/river-stones';
+import { createSlowPuzzle } from './slow-puzzle/slow-puzzle';
 
 export const GAMES: GameInfo[] = [
   {
@@ -21,5 +23,17 @@ export const GAMES: GameInfo[] = [
     title: 'Quiet Grid',
     blurb: 'Fill the grid from the clues and a nature picture appears.',
     create: createQuietGrid,
+  },
+  {
+    id: 'lotus-tiles',
+    title: 'Lotus Tiles',
+    blurb: 'Match pairs of tiles. When you are stuck, they reshuffle themselves.',
+    create: createLotusTiles,
+  },
+  {
+    id: 'slow-puzzle',
+    title: 'Slow Puzzle',
+    blurb: 'A jigsaw of calm landscapes. Pieces settle into place by themselves.',
+    create: createSlowPuzzle,
   },
 ];

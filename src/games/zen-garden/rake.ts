@@ -13,6 +13,20 @@ export function thin(points: Point[], minDist: number): Point[] {
   return out;
 }
 
+/** Sway a path sideways in a sine wave, so a rake leaves flowing lines instead of straight ones. */
+export function wavy(points: Point[], amplitude: number, wavelength: number): Point[] {
+  if (points.length < 2) return points;
+  let travelled = 0;
+  return points.map((p, i) => {
+    if (i) travelled += Math.hypot(p.x - points[i - 1].x, p.y - points[i - 1].y);
+    const a = points[Math.max(0, i - 1)];
+    const b = points[Math.min(points.length - 1, i + 1)];
+    const len = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+    const sway = amplitude * Math.sin((travelled / wavelength) * Math.PI * 2);
+    return { x: p.x - ((b.y - a.y) / len) * sway, y: p.y + ((b.x - a.x) / len) * sway };
+  });
+}
+
 /**
  * Parallel lines a rake with `teeth` prongs leaves behind a stroke: each tooth
  * follows the path, offset sideways by `spacing`, centred on the stroke.

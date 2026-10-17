@@ -9,7 +9,7 @@ A collection of soothing, untimed, no-lose board and puzzle games, each with cal
 
 ## Status
 
-Milestones **M0 Setup**, **M1 Shell** and **M2 First games** are done and live: the home Zen Garden, settings, breathing guide, mood check, offline install, and three games (Petal Mandala, River Stones, Quiet Grid). Next is **T1 Test round 1**, then **M3** (Lotus Tiles, Slow Puzzle).
+Milestones **M0 Setup**, **M1 Shell** and **M2 First games** are done and live: the home Zen Garden, settings, breathing guide, mood check, offline install, and three games (Petal Mandala, River Stones, Quiet Grid). **M3** (Lotus Tiles, Slow Puzzle) and a shared Help system in every game are built and waiting to be merged. Next is **T1 Test round 1**, then **M4** (Grow a Valley).
 
 ## Tech stack
 
@@ -187,6 +187,18 @@ On branch `feature/m2-first-games`: a hash router and a shared game interface (`
 ### Step 19: Version the offline cache (2026-10-17)
 
 On branch `feature/sw-versioned-cache`: M2 was merged and deployed, but returning visitors kept seeing the old build because the service worker served cached files first under a fixed cache name. The app now registers `sw.js?v=<version>`, and the worker names its cache `calm-games-<version>`, so each release gets a fresh cache and old ones are deleted on activate. Version bumped to 0.3.1.
+
+### Step 20: Add a shared Help system (2026-10-17)
+
+On branch `feature/m3-help-and-games`: every game now has one **Help** button in place of the old single Hint. It opens a panel with three steps, each asking a little more of the game: **Nudge me** (words only, such as "Row 2 says 2 2 in 5 cells, so the clue fills the whole line"), **Show me** (highlights the spot on the board) and **Do it for me** (makes the move). A **How to play** sheet opens the first time each game is played and is always reachable from the panel. Nothing is counted or penalised. The shared component is `src/ui/help.ts`; each game supplies the `HelpProvider` (rules plus the three steps), and the logic behind them lives in pure, tested functions: `helpTarget` for Quiet Grid (mistakes first, then lines the clue settles, then the best foothold), `moveKind` for River Stones, `nextBlank` for Petal Mandala, `suggestPair` for Lotus Tiles and `nextHelpPiece` for Slow Puzzle.
+
+### Step 21: Grow the Zen Garden (2026-10-17)
+
+New tools beside Rake and Stone: **Rings** (concentric ripples), **Moss**, **Lantern** and **Erase**. A **Customise** sheet tunes the rake (3, 5, 7 or 9 teeth; fine, medium or wide spacing; straight or wavy) and the stones (small, medium, large or mixed; round or flat; five colours). Choices are saved on the device (`calm.gardenOptions`). Each mark remembers the settings it was made with, so changing them never alters the garden already raked. **Undo** now restores the whole garden as it was before the last change, so it also reverses Smooth and Erase.
+
+### Step 22: Build M3, Lotus Tiles and Slow Puzzle (2026-10-17)
+
+**Lotus Tiles** is mahjong solitaire on an SVG board with two layouts (Bud, 28 tiles; Lotus, 48 tiles). The dealer removes free pairs one at a time and gives each pair a symbol, so every deal can be cleared. If no matching pair is left, the tiles reshuffle on their own (also solvable); a Shuffle button does the same on request. **Slow Puzzle** is a canvas jigsaw with 12, 24 or 48 pieces, three landscapes painted in code (no image files to license) and pieces that settle into place when dropped close to the right spot. Both games save and resume, and both use the shared Help. Version bumped to 0.4.0.
 
 ### How to deploy a new tester build
 

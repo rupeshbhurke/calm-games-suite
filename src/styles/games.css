@@ -235,3 +235,124 @@
   background: var(--soft-gold);
   transition: background var(--dur-scene) var(--ease-calm);
 }
+
+/* Help */
+.help-panel {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.help-message {
+  margin: 0;
+  text-align: center;
+  min-height: 1.5em;
+}
+
+.helped {
+  outline: 4px solid var(--lavender-haze);
+  outline-offset: 2px;
+  transition: outline-color var(--dur-small) var(--ease-calm);
+}
+
+path.helped {
+  outline: none;
+  stroke: var(--lavender-haze);
+  stroke-width: 3;
+}
+
+/* Lotus Tiles */
+.lotus-board {
+  max-width: min(100%, 560px);
+}
+
+.lotus {
+  width: 100%;
+  height: auto;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.tile {
+  cursor: pointer;
+  transition: opacity var(--dur-small) var(--ease-calm);
+}
+
+.tile .edge {
+  fill: var(--deep-moss);
+  opacity: 0.55;
+}
+
+.tile .face {
+  fill: var(--sand);
+  stroke: var(--deep-moss);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+  transition: fill var(--dur-small) var(--ease-calm);
+}
+
+.tile .glyph {
+  font-size: 24px;
+  pointer-events: none;
+}
+
+.tile.blocked .face {
+  fill: color-mix(in srgb, var(--sand) 55%, var(--deep-moss));
+}
+
+.tile.blocked .glyph {
+  opacity: 0.55;
+}
+
+.tile.picked .face {
+  fill: var(--lavender-haze);
+  stroke: var(--still-water);
+  stroke-opacity: 1;
+  stroke-width: 3;
+}
+
+.tile.gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tile.helped .face {
+  stroke: var(--lavender-haze);
+  stroke-opacity: 1;
+  stroke-width: 4;
+}
+
+.tile.helped {
+  outline: none;
+}
+
+.lotus-board.solved .tile .face {
+  fill: var(--soft-gold);
+}
+
+/* Slow Puzzle */
+.jigsaw-board {
+  max-width: min(100%, 720px);
+}
+
+.jigsaw {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  border-radius: var(--radius);
+  background: var(--surface);
+  touch-action: none;
+  cursor: grab;
+}
+
+.jigsaw:active {
+  cursor: grabbing;
+}
+
+.peek {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}

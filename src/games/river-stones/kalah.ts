@@ -116,3 +116,10 @@ export function chooseGentleMove(s: KalahState, rand: () => number = Math.random
   if (rand() < 0.4) return moves[Math.floor(rand() * moves.length)];
   return suggestMove(s);
 }
+
+/** Why a move is a good one, for hints in words: another turn, a capture, or just steady play. */
+export function moveKind(s: KalahState, pit: number): 'extra' | 'capture' | 'plain' {
+  const r = applyMove(s, pit);
+  if (r.extraTurn) return 'extra';
+  return r.captured > 0 ? 'capture' : 'plain';
+}

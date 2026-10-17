@@ -16,7 +16,8 @@ import {
 } from './core/storage';
 import { applyTheme, resolveTheme } from './core/theme';
 import { GAMES } from './games';
-import { Garden, type Tool } from './games/zen-garden/garden';
+import { Garden, TOOL_HINTS, TOOL_LABELS, type Tool } from './games/zen-garden/garden';
+import { openGardenOptions } from './ui/garden-options';
 import { openBreathingGuide } from './ui/breathing';
 import { el, openSheet } from './ui/dom';
 import { askMood, showMoodSummary } from './ui/mood';
@@ -89,7 +90,7 @@ if (app) {
   // ---- Home: the Zen Garden ----
   const canvas = el('canvas', {
     class: 'garden',
-    'aria-label': 'Sand garden. Drag to rake, or tap to place a stone.',
+    'aria-label': 'Sand garden. Choose a tool, then drag or tap on the sand.',
     role: 'img',
   });
   const hint = el('p', { class: 'stage-hint', text: 'Drag to rake the sand' });
@@ -102,18 +103,31 @@ if (app) {
     },
   });
 
-  const tools: Record<Tool, HTMLButtonElement> = {
-    rake: el('button', { type: 'button', class: 'tool', 'aria-pressed': 'true', text: 'Rake' }),
-    stone: el('button', { type: 'button', class: 'tool', 'aria-pressed': 'false', text: 'Stone' }),
-  };
+  const toolNames = Object.keys(TOOL_LABELS) as Tool[];
+  const tools = Object.fromEntries(
+    toolNames.map((name) => [
+      name,
+      el('button', {
+        type: 'button',
+        class: 'tool',
+        'aria-pressed': String(name === 'rake'),
+        text: TOOL_LABELS[name],
+      }),
+    ]),
+  ) as Record<Tool, HTMLButtonElement>;
   const pick = (tool: Tool) => {
     garden.tool = tool;
-    hint.textContent = tool === 'rake' ? 'Drag to rake the sand' : 'Tap to place a stone';
+    hint.textContent = TOOL_HINTS[tool];
+    hint.hidden = false;
     for (const [name, b] of Object.entries(tools))
       b.setAttribute('aria-pressed', String(name === tool));
   };
-  tools.rake.addEventListener('click', () => pick('rake'));
-  tools.stone.addEventListener('click', () => pick('stone'));
+  for (const name of toolNames) tools[name].addEventListener('click', () => pick(name));
+
+  const customise = el('button', { type: 'button', text: 'Customise' });
+  customise.addEventListener('click', () =>
+    openGardenOptions(garden.options, (next) => garden.setOptions(next)),
+  );
 
   const undo = el('button', { type: 'button', text: 'Undo' });
   undo.disabled = !garden.canUndo;
@@ -147,8 +161,8 @@ if (app) {
     el('section', { class: 'stage' }, [canvas, hint]),
     el('nav', { class: 'toolbar', 'aria-label': 'Garden tools' }, [
       gamesBtn,
-      tools.rake,
-      tools.stone,
+      ...toolNames.map((name) => tools[name]),
+      customise,
       undo,
       smooth,
       ...sharedButtons(),
