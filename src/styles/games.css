@@ -262,3 +262,72 @@ path.helped {
   stroke: var(--lavender-haze);
   stroke-width: 3;
 }
+
+/* Lotus Tiles */
+.lotus-board {
+  max-width: min(100%, 560px);
+}
+
+.lotus {
+  width: 100%;
+  height: auto;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.tile {
+  cursor: pointer;
+  transition: opacity var(--dur-small) var(--ease-calm);
+}
+
+.tile .edge {
+  fill: var(--deep-moss);
+  opacity: 0.55;
+}
+
+.tile .face {
+  fill: var(--sand);
+  stroke: var(--deep-moss);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+  transition: fill var(--dur-small) var(--ease-calm);
+}
+
+.tile .glyph {
+  font-size: 24px;
+  pointer-events: none;
+}
+
+.tile.blocked .face {
+  fill: color-mix(in srgb, var(--sand) 55%, var(--deep-moss));
+}
+
+.tile.blocked .glyph {
+  opacity: 0.55;
+}
+
+.tile.picked .face {
+  fill: var(--lavender-haze);
+  stroke: var(--still-water);
+  stroke-opacity: 1;
+  stroke-width: 3;
+}
+
+.tile.gone {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tile.helped .face {
+  stroke: var(--lavender-haze);
+  stroke-opacity: 1;
+  stroke-width: 4;
+}
+
+.tile.helped {
+  outline: none;
+}
+
+.lotus-board.solved .tile .face {
+  fill: var(--soft-gold);
+}
