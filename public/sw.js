@@ -1,7 +1,10 @@
 // Offline support. Same-origin GETs are cached as they are used; the app
 // shell and its hashed assets are precached on install so the first visit
-// already works offline. Bump CACHE to drop old files after a breaking change.
-const CACHE = 'calm-games-v1';
+// already works offline. The cache name carries the app version (passed as
+// ?v= when registering), so each release starts fresh and old caches are
+// deleted on activate.
+const VERSION = new URL(self.location.href).searchParams.get('v') ?? 'dev';
+const CACHE = `calm-games-${VERSION}`;
 const SCOPE = self.registration.scope;
 
 self.addEventListener('install', (event) => {
