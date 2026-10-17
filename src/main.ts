@@ -1,18 +1,24 @@
 import './styles/main.css';
+import './styles/games.css';
 import { Mixer } from './core/audio';
+import type { CalmGame } from './core/game';
 import { applyMotion, prefersReducedMotion } from './core/motion';
+import { gameHash, parseRoute } from './core/router';
 import {
   addMoodEntry,
   loadMoodLog,
   loadSettings,
   moodDelta,
+  readStored,
   saveSettings,
+  writeStored,
   type Settings,
 } from './core/storage';
 import { applyTheme, resolveTheme } from './core/theme';
+import { GAMES } from './games';
 import { Garden, type Tool } from './games/zen-garden/garden';
 import { openBreathingGuide } from './ui/breathing';
-import { el } from './ui/dom';
+import { el, openSheet } from './ui/dom';
 import { askMood, showMoodSummary } from './ui/mood';
 import { openSettings } from './ui/settings';
 
@@ -27,13 +33,18 @@ if (app) {
   const mixer = new Mixer();
   const session = Date.now();
   let installEvent: InstallPromptEvent | null = null;
+  const soundButtons: HTMLButtonElement[] = [];
 
+  const syncSound = () => {
+    for (const b of soundButtons) b.textContent = settings.muted ? 'Sound off' : 'Sound on';
+  };
   const apply = () => {
     applyTheme(resolveTheme(settings.theme, new Date().getHours()));
     applyMotion(prefersReducedMotion(settings.reduceMotion));
     document.documentElement.dataset.handed = settings.leftHanded ? 'left' : 'right';
     mixer.setVolumes(settings);
     garden.redraw();
+    syncSound();
   };
   const update = (patch: Partial<Settings>) => {
     settings = { ...settings, ...patch };
@@ -41,6 +52,41 @@ if (app) {
     apply();
   };
 
+  // Buttons shared by the garden and every game.
+  const sharedButtons = (): HTMLButtonElement[] => {
+    const breathe = el('button', { type: 'button', text: 'Breathe' });
+    breathe.addEventListener('click', () =>
+      openBreathingGuide({ settings: () => settings, update, mixer }),
+    );
+    const sound = el('button', { type: 'button' });
+    soundButtons.push(sound);
+    sound.addEventListener('click', () => update({ muted: !settings.muted }));
+    const settingsBtn = el('button', { type: 'button', text: 'Settings' });
+    settingsBtn.addEventListener('click', () =>
+      openSettings({
+        settings,
+        update,
+        version: __APP_VERSION__,
+        install: installEvent
+          ? () => {
+              void installEvent?.prompt();
+              installEvent = null;
+            }
+          : undefined,
+      }),
+    );
+    const done = el('button', { type: 'button', class: 'primary', text: "I'm done" });
+    done.addEventListener('click', async () => {
+      const after = await askMood('How do you feel now?');
+      if (after === null) return;
+      addMoodEntry({ at: Date.now(), phase: 'after', score: after, session });
+      const delta = moodDelta(loadMoodLog(), session);
+      showMoodSummary(delta === null ? null : after - delta, after);
+    });
+    return [breathe, sound, settingsBtn, done];
+  };
+
+  // ---- Home: the Zen Garden ----
   const canvas = el('canvas', {
     class: 'garden',
     'aria-label': 'Sand garden. Drag to rake, or tap to place a stone.',
@@ -74,69 +120,118 @@ if (app) {
   undo.addEventListener('click', () => garden.undo());
   const smooth = el('button', { type: 'button', text: 'Smooth' });
   smooth.addEventListener('click', () => garden.smooth());
-  const breathe = el('button', { type: 'button', text: 'Breathe' });
-  breathe.addEventListener('click', () =>
-    openBreathingGuide({ settings: () => settings, update, mixer }),
-  );
-  const sound = el('button', { type: 'button' });
-  const syncSound = () => {
-    sound.textContent = settings.muted ? 'Sound off' : 'Sound on';
-  };
-  sound.addEventListener('click', () => {
-    update({ muted: !settings.muted });
-    syncSound();
-  });
-  const settingsBtn = el('button', { type: 'button', text: 'Settings' });
-  settingsBtn.addEventListener('click', () =>
-    openSettings({
-      settings,
-      update: (patch) => {
-        update(patch);
-        syncSound();
-      },
-      version: __APP_VERSION__,
-      install: installEvent
-        ? () => {
-            void installEvent?.prompt();
-            installEvent = null;
-          }
-        : undefined,
-    }),
-  );
-  const done = el('button', { type: 'button', class: 'primary', text: "I'm done" });
-  done.addEventListener('click', async () => {
-    const after = await askMood('How do you feel now?');
-    if (after === null) return;
-    addMoodEntry({ at: Date.now(), phase: 'after', score: after, session });
-    const log = loadMoodLog();
-    const delta = moodDelta(log, session);
-    const before = delta === null ? null : after - delta;
-    showMoodSummary(before, after);
+
+  const gamesBtn = el('button', { type: 'button', class: 'primary', text: 'Games' });
+  gamesBtn.addEventListener('click', () => {
+    const close = el('button', { class: 'quiet', type: 'button', text: 'Close' });
+    const items = GAMES.map((g) => {
+      const b = el('button', { type: 'button', class: 'game-card' }, [
+        el('strong', { text: g.title }),
+        el('span', { text: g.blurb }),
+      ]);
+      b.addEventListener('click', () => {
+        dialog.close();
+        location.hash = gameHash(g.id);
+      });
+      return b;
+    });
+    const dialog = openSheet('Choose a game', [
+      el('div', { class: 'game-list' }, items),
+      el('div', { class: 'row end' }, [close]),
+    ]);
+    close.addEventListener('click', () => dialog.close());
   });
 
-  const toolbar = el('nav', { class: 'toolbar', 'aria-label': 'Garden tools' }, [
-    tools.rake,
-    tools.stone,
-    undo,
-    smooth,
-    breathe,
-    sound,
-    settingsBtn,
-    done,
-  ]);
-
-  app.append(
+  const home = el('div', { class: 'view home' }, [
     el('header', {}, [el('h1', { text: 'Calm Games Suite' })]),
     el('section', { class: 'stage' }, [canvas, hint]),
-    toolbar,
-  );
+    el('nav', { class: 'toolbar', 'aria-label': 'Garden tools' }, [
+      gamesBtn,
+      tools.rake,
+      tools.stone,
+      undo,
+      smooth,
+      ...sharedButtons(),
+    ]),
+  ]);
 
-  syncSound();
+  // ---- Game host ----
+  const gameView = el('div', { class: 'view game-view', hidden: '' });
+  app.append(home, gameView);
+
+  let current: { game: CalmGame; key: string } | null = null;
+  let saveTimer: number | undefined;
+
+  const persist = () => {
+    window.clearTimeout(saveTimer);
+    if (current) writeStored(current.key, current.game.save());
+  };
+
+  function closeGame() {
+    if (!current) return;
+    persist();
+    current.game.unmount();
+    current = null;
+    gameView.replaceChildren();
+  }
+
+  function openGame(id: string) {
+    const info = GAMES.find((g) => g.id === id);
+    if (!info) {
+      location.hash = '';
+      return;
+    }
+    closeGame();
+    const game = info.create();
+    const key = `calm.game.${id}`;
+    game.load(readStored(key));
+    current = { game, key };
+
+    const back = el('a', { class: 'back', href: '#/', text: '← Garden' });
+    const root = el('div', { class: 'game-root' });
+    gameView.append(
+      el('header', { class: 'game-head' }, [back, el('h1', { text: info.title })]),
+      root,
+      el('nav', { class: 'toolbar', 'aria-label': 'Suite controls' }, sharedButtons()),
+    );
+    game.mount(root, {
+      mixer,
+      reducedMotion: () => prefersReducedMotion(settings.reduceMotion),
+      requestSave: () => {
+        window.clearTimeout(saveTimer);
+        saveTimer = window.setTimeout(persist, 300);
+      },
+    });
+    syncSound();
+  }
+
+  function route() {
+    const r = parseRoute(location.hash);
+    const inGame = r.name === 'game';
+    home.hidden = inGame;
+    gameView.hidden = !inGame;
+    if (r.name === 'game') openGame(r.id);
+    else {
+      closeGame();
+      garden.redraw();
+    }
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+
   apply();
+  route();
 
   // Browsers only allow audio after a gesture; start on the first touch.
   window.addEventListener('pointerdown', () => mixer.unlock(), { once: true });
-  document.addEventListener('visibilitychange', () => mixer.setActive(!document.hidden));
+  document.addEventListener('visibilitychange', () => {
+    mixer.setActive(!document.hidden);
+    if (document.hidden) {
+      current?.game.pause();
+      persist();
+    } else current?.game.resume();
+  });
+  window.addEventListener('pagehide', persist);
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     installEvent = e as InstallPromptEvent;

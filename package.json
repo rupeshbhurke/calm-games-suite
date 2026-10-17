@@ -1,7 +1,7 @@
 {
   "name": "calm-games-suite",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Soothing, untimed, no-lose board and puzzle games to unwind after a stressful day.",
   "type": "module",
   "scripts": {

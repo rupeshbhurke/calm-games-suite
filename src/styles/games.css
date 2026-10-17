@@ -1,0 +1,237 @@
+[hidden] {
+  display: none !important;
+}
+
+.view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.game-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-head h1 {
+  flex: 1;
+  text-align: center;
+  margin-right: 80px; /* balances the back link so the title stays centred */
+}
+
+.back {
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 4px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.game-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-board {
+  width: min(94vw, 460px);
+}
+
+.game-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.1rem;
+}
+
+.game-status {
+  text-align: center;
+  min-height: 1.5em;
+  opacity: 0.85;
+}
+
+.game-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.game-list {
+  display: grid;
+  gap: 10px;
+}
+
+.game-card {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.game-card span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Petal Mandala */
+.mandala {
+  width: 100%;
+  height: auto;
+  touch-action: none;
+  border-radius: 50%;
+}
+
+.petal {
+  fill: var(--surface);
+  stroke: color-mix(in srgb, var(--text) 35%, transparent);
+  stroke-width: 0.6;
+  cursor: pointer;
+  transition: fill var(--dur-small) var(--ease-calm);
+}
+
+.mandala.glow {
+  filter: drop-shadow(0 0 8px var(--soft-gold));
+}
+
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.swatch {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.swatch[aria-pressed='true'] {
+  outline: 3px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* River Stones */
+.kalah {
+  display: grid;
+  grid-template-columns: 1.2fr repeat(6, 1fr) 1.2fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--still-water) 55%, var(--surface));
+}
+
+.pit,
+.store {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 64px;
+  padding: 4px;
+  border-radius: 999px;
+  border: none;
+  background: color-mix(in srgb, var(--sand) 80%, var(--surface));
+  color: var(--deep-moss);
+}
+
+.store {
+  border-radius: 40px;
+}
+
+.pit:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.pit:not(:disabled) {
+  box-shadow: 0 0 0 2px var(--soft-gold);
+}
+
+.pit.hint {
+  box-shadow: 0 0 0 4px var(--lavender-haze);
+}
+
+.count {
+  position: absolute;
+  bottom: 2px;
+  right: 8px;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.stones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+  max-width: 3.2rem;
+}
+
+.stones i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #6d7a76;
+}
+
+/* Quiet Grid */
+.nonogram {
+  --cell: min(calc((94vw - 90px) / var(--cols)), 44px);
+  display: grid;
+  grid-template-columns: auto repeat(var(--cols), var(--cell));
+  gap: 2px;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.clue {
+  display: flex;
+  gap: 4px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.col-clue {
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.row-clue {
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 6px;
+}
+
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  padding: 0;
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.cell.on {
+  background: var(--sage);
+}
+
+.cell.mark {
+  opacity: 0.6;
+}
+
+.nonogram.solved .cell.on {
+  background: var(--soft-gold);
+  transition: background var(--dur-scene) var(--ease-calm);
+}

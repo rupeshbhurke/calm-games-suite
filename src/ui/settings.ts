@@ -11,7 +11,7 @@ export interface SettingsContext {
 }
 
 const WHATS_NEW =
-  'Breathing guide: see each change coming, gentle, relaxing or box patterns, a soft gong, optional timed sessions.';
+  'Three games: Petal Mandala, River Stones and Quiet Grid, each saved and resumed on this device.';
 
 function slider(label: string, value: number, onInput: (v: number) => void): HTMLElement {
   const input = el('input', {
