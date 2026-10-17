@@ -265,3 +265,24 @@ button.quiet {
 .options > * + * {
   margin-top: 12px;
 }
+
+/* Garden customise sheet */
+.sheet h3 {
+  margin: 8px 0 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.option {
+  display: grid;
+  gap: 6px;
+}
+
+.option-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.choice {
+  flex-wrap: wrap;
+}
