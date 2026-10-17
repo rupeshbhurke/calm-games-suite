@@ -203,6 +203,10 @@ New tools beside Rake and Stone: **Rings** (concentric ripples), **Moss**, **Lan
 ### How to deploy a new tester build
 
 1. Commit your changes on a `feature/<name>` branch and push it; the CI workflow checks it.
-2. Open a pull request into `main` and merge it once CI is green.
+2. Open a pull request into `main`. `main` is protected, so the `check` job must pass and the branch must be up to date before you can merge; use squash or rebase (history is linear).
 3. The Deploy workflow publishes `main` to GitHub Pages in about a minute.
 4. Bump `version` in `package.json` for each build you send to testers, and tag it: `git tag v0.1.0 && git push --tags`.
+
+### Step 23: Protect main and format on edit (2026-10-18)
+
+CI caught a Prettier failure in `.claude/skills/run-calm-games-suite/SKILL.md`, so two guards were added. **Branch protection on `main`** (set with `gh api -X PUT repos/rupeshbhurke/calm-games-suite/branches/main/protection`): a pull request is required (no approvals, so a solo maintainer can merge), the `check` CI job must pass on an up-to-date branch, history stays linear, review conversations must be resolved, and force pushes and deletion are blocked. Administrators are not included, so the owner can bypass in an emergency. Head branches are deleted after merge. A **Claude Code hook** (`.claude/settings.json` and `.claude/hooks/prettier.mjs`) runs Prettier on every file Claude edits or writes, so `format:check` stays green.
