@@ -11,7 +11,7 @@ export interface SettingsContext {
 }
 
 const WHATS_NEW =
-  'Three games: Petal Mandala, River Stones and Quiet Grid, each saved and resumed on this device.';
+  'Two new games, Lotus Tiles and Slow Puzzle. A Help button in every game with nudges, pointers and a hand. The garden has new tools and a customisable rake and stones.';
 
 function slider(label: string, value: number, onInput: (v: number) => void): HTMLElement {
   const input = el('input', {

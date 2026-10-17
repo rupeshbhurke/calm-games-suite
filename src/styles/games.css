@@ -331,3 +331,28 @@ path.helped {
 .lotus-board.solved .tile .face {
   fill: var(--soft-gold);
 }
+
+/* Slow Puzzle */
+.jigsaw-board {
+  max-width: min(100%, 720px);
+}
+
+.jigsaw {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  border-radius: var(--radius);
+  background: var(--surface);
+  touch-action: none;
+  cursor: grab;
+}
+
+.jigsaw:active {
+  cursor: grabbing;
+}
+
+.peek {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
