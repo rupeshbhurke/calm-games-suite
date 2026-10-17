@@ -9,7 +9,7 @@ A collection of soothing, untimed, no-lose board and puzzle games, each with cal
 
 ## Status
 
-Milestone **M0 Setup** is done: the "Hello calm" page deploys automatically to GitHub Pages on every push to `main`. Next is **M1 Shell** (home Zen Garden, settings, audio, breathing guide, mood check, offline install).
+Milestones **M0 Setup**, **M1 Shell** and **M2 First games** are done and live: the home Zen Garden, settings, breathing guide, mood check, offline install, and three games (Petal Mandala, River Stones, Quiet Grid). Next is **T1 Test round 1**, then **M3** (Lotus Tiles, Slow Puzzle).
 
 ## Tech stack
 
@@ -183,6 +183,10 @@ On branch `feature/breathing-guide`: a progress ring and a "next" label show eac
 ### Step 18: Build M2, the first three games (2026-10-10)
 
 On branch `feature/m2-first-games`: a hash router and a shared game interface (`CalmGame`) let the shell load, pause, save and resume any game; each game's state is auto-saved to `localStorage`. **Petal Mandala** (57 regions, 8 colours, tap or drag to colour, unlimited undo), **River Stones** (Kalah rules in pure functions, a deliberately gentle opponent that plays a sensible move about 60% of the time, hints, undo, two-player mode; the end is a quiet tally, not a win or loss) and **Quiet Grid** (nonograms with three nature pictures, drag to fill, mark-empty mode, hints that fill a correct cell). The Games button on the home screen opens the picker. Per-game nature sound beds are not built yet; the games use the shared chimes. Version bumped to 0.3.0.
+
+### Step 19: Version the offline cache (2026-10-17)
+
+On branch `feature/sw-versioned-cache`: M2 was merged and deployed, but returning visitors kept seeing the old build because the service worker served cached files first under a fixed cache name. The app now registers `sw.js?v=<version>`, and the worker names its cache `calm-games-<version>`, so each release gets a fresh cache and old ones are deleted on activate. Version bumped to 0.3.1.
 
 ### How to deploy a new tester build
 
