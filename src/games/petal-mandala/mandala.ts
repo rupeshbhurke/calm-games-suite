@@ -1,6 +1,7 @@
 import type { CalmGame, GameContext } from '../../core/game';
 import { el } from '../../ui/dom';
-import { BLANK, buildRegions, PALETTE } from './regions';
+import { createHelp, flash } from '../../ui/help';
+import { BLANK, buildRegions, nextBlank, PALETTE, ringName } from './regions';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const HISTORY_LIMIT = 200;
@@ -152,13 +153,41 @@ export function createPetalMandala(): CalmGame {
       commit(changes);
     });
 
+    const help = createHelp('petal-mandala', 'Petal Mandala', {
+      rules: [
+        'Pick a colour, then tap a petal to colour it. Drag across petals to colour several at once.',
+        'Tap a petal in the same colour again to clear it. Undo takes back your last stroke.',
+        'There is no right or wrong colouring. Finish when it feels done.',
+      ],
+      nudge: () => {
+        const n = nextBlank(fills, regions);
+        if (!n) return null;
+        return `The ${ringName(n.ring)} ring still has ${n.blankInRing} blank ${n.blankInRing === 1 ? 'piece' : 'pieces'}. Perhaps start there.`;
+      },
+      show: () => {
+        const n = nextBlank(fills, regions);
+        if (!n) return null;
+        flash(paths[n.id]);
+        return 'The highlighted piece is still blank.';
+      },
+      apply: () => {
+        const n = nextBlank(fills, regions);
+        if (!n) return null;
+        const c = paint(n.id, false);
+        if (c) commit([c]);
+        return `Coloured it ${PALETTE[selected].name.toLowerCase()} for you.`;
+      },
+    });
+
     status = el('p', { class: 'game-status', 'aria-live': 'polite' });
     root.append(
       el('div', { class: 'game-board mandala-board' }, [svg]),
       status,
       palette,
-      el('div', { class: 'game-bar' }, [undoBtn, clear]),
+      el('div', { class: 'game-bar' }, [help.toggle, undoBtn, clear]),
+      help.panel,
     );
+    help.maybeShowRules();
   }
 
   return {

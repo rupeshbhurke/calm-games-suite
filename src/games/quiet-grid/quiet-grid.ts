@@ -1,9 +1,11 @@
 import type { CalmGame, GameContext } from '../../core/game';
 import { el } from '../../ui/dom';
+import { createHelp, flash } from '../../ui/help';
 import {
   colClues,
+  describeHelp,
   emptyCells,
-  hintCell,
+  helpTarget,
   isSolved,
   parseArt,
   progress,
@@ -180,13 +182,32 @@ export function createQuietGrid(): CalmGame {
       mode = mode === 1 ? 2 : 1;
       refresh();
     });
-    const hint = el('button', { type: 'button', text: 'Hint' });
-    hint.addEventListener('click', () => {
-      const h = hintCell(cells(), solution());
-      if (!h) return;
-      const changes: Change[] = [];
-      setCell(h.r, h.c, solution()[h.r][h.c] ? 1 : 0, changes);
-      commit(changes);
+    const help = createHelp('quiet-grid', 'Quiet Grid', {
+      rules: [
+        'The numbers beside each row and above each column tell you how many cells in a row are filled, and in what order. 3 1 means a run of three, a gap, then one.',
+        'Tap or drag to fill cells. Use the Filling/Marking switch to mark cells you know are empty. Marks are only for you.',
+        'When every clue matches, a nature picture appears.',
+      ],
+      nudge: () => {
+        const h = helpTarget(cells(), solution());
+        return h && describeHelp(h);
+      },
+      show: () => {
+        const h = helpTarget(cells(), solution());
+        if (!h) return null;
+        flash(buttons[h.cell.r][h.cell.c]);
+        return solution()[h.cell.r][h.cell.c]
+          ? 'The highlighted cell should be filled.'
+          : 'The highlighted cell should be empty.';
+      },
+      apply: () => {
+        const h = helpTarget(cells(), solution());
+        if (!h) return null;
+        const changes: Change[] = [];
+        setCell(h.cell.r, h.cell.c, solution()[h.cell.r][h.cell.c] ? 1 : 0, changes);
+        commit(changes);
+        return 'Done. One cell put right.';
+      },
     });
     undoBtn = el('button', { type: 'button', text: 'Undo' });
     undoBtn.addEventListener('click', () => {
@@ -216,9 +237,11 @@ export function createQuietGrid(): CalmGame {
       title,
       el('div', { class: 'game-board' }, [board]),
       status,
-      el('div', { class: 'game-bar' }, [modeBtn, hint, undoBtn, clear, next]),
+      el('div', { class: 'game-bar' }, [modeBtn, help.toggle, undoBtn, clear, next]),
+      help.panel,
     );
     refresh();
+    help.maybeShowRules();
   }
 
   return {

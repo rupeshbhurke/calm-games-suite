@@ -1,6 +1,15 @@
 import type { CalmGame, GameContext } from '../../core/game';
 import { el } from '../../ui/dom';
-import { applyMove, chooseGentleMove, newGame, score, suggestMove, type KalahState } from './kalah';
+import { createHelp } from '../../ui/help';
+import {
+  applyMove,
+  chooseGentleMove,
+  moveKind,
+  newGame,
+  score,
+  suggestMove,
+  type KalahState,
+} from './kalah';
 
 type Mode = 'ai' | 'two';
 
@@ -173,11 +182,34 @@ export function createRiverStones(): CalmGame {
       render();
       ctx.requestSave();
     });
-    const hint = el('button', { type: 'button', text: 'Hint' });
-    hint.addEventListener('click', () => {
-      if (!isHumanTurn() || busy) return;
-      hintPit = suggestMove(state);
-      render();
+    const waiting = 'Help is ready when it is your turn.';
+    const help = createHelp('river-stones', 'River Stones', {
+      rules: [
+        'Each side has six pits and a store. Pick one of your pits and its stones are sown one by one around the river, anticlockwise.',
+        'A stone dropped into your store counts for you. If your last stone lands in your store, you take another turn.',
+        'If your last stone lands in an empty pit on your side, you collect it and the stones opposite.',
+        'When one side runs out of stones, the rest go to their owners and the game ends with a quiet tally.',
+      ],
+      nudge: () => {
+        if (!isHumanTurn() || busy) return waiting;
+        const kind = moveKind(state, suggestMove(state));
+        return kind === 'extra'
+          ? 'Look for a pit whose last stone lands exactly in your store. That earns another turn.'
+          : kind === 'capture'
+            ? 'Look for a pit whose last stone lands in an empty pit on your side, opposite some stones. You get to collect them.'
+            : 'No special move this time. Pits nearer your store keep stones on your side.';
+      },
+      show: () => {
+        if (!isHumanTurn() || busy) return waiting;
+        hintPit = suggestMove(state);
+        render();
+        return 'The glowing pit is a good move.';
+      },
+      apply: () => {
+        if (!isHumanTurn() || busy) return waiting;
+        void humanPlay(suggestMove(state));
+        return 'Played a good move for you.';
+      },
     });
     modeBtn = el('button', { type: 'button' });
     modeBtn.addEventListener('click', () => {
@@ -190,8 +222,10 @@ export function createRiverStones(): CalmGame {
     root.append(
       el('div', { class: 'game-board' }, [board]),
       status,
-      el('div', { class: 'game-bar' }, [hint, undoBtn, modeBtn, again]),
+      el('div', { class: 'game-bar' }, [help.toggle, undoBtn, modeBtn, again]),
+      help.panel,
     );
+    help.maybeShowRules();
   }
 
   function restart() {

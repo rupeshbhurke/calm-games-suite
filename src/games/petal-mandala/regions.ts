@@ -71,3 +71,25 @@ export const PALETTE = [
 
 /** A fill is a palette index, or -1 for blank. */
 export const BLANK = -1;
+
+const RING_NAMES = ['inner petal', 'inner band', 'outer petal', 'outer band'];
+
+/** What to call a ring when talking to the player; the centre disc is ring -1. */
+export function ringName(ring: number): string {
+  return ring < 0 ? 'centre' : (RING_NAMES[ring] ?? `ring ${ring + 1}`);
+}
+
+/** The next blank region to point at: the centre first, then working outwards. */
+export function nextBlank(
+  fills: number[],
+  regions: Region[],
+): { id: number; ring: number; blankInRing: number } | null {
+  const blank = regions.filter((r) => fills[r.id] === BLANK);
+  if (!blank.length) return null;
+  const first = blank[0];
+  return {
+    id: first.id,
+    ring: first.ring,
+    blankInRing: blank.filter((r) => r.ring === first.ring).length,
+  };
+}
