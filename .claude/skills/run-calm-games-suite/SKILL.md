@@ -101,7 +101,7 @@ npm run build
   and also clicks "Got it" as a fallback if the modal shows up anyway
   (e.g. after a schema version bump).
 - **Hash-routing lets you skip the menu entirely.** `location.hash =
-  '#/game/<id>'` (via `page.evaluate`) jumps straight into a game — no
+'#/game/<id>'` (via `page.evaluate`) jumps straight into a game — no
   need to click "Games" then a `.game-card`. The driver uses this for
   the `[gameId]` path and only exercises the real menu-click flow for
   the no-argument (home) path.
